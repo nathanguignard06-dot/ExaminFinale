@@ -1,0 +1,18 @@
+body
+{
+   background-color: rgba(43, 163, 200, 0.413);
+}
+
+.page
+{
+    max-width: 1350px;
+    margin: 47px auto;
+    background-color: white;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.20);
+    border-radius: 5px;
+}
+
+.nav-link
+{
+    color: black;
+}
