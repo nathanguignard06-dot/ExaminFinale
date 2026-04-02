@@ -4,8 +4,18 @@
 #include <SPIFFS.h>
 #include <WebServer.h>
 
-const char* ssid = "Famille Guignard";
-const char* password = "R4683535";
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+#define SCREEN_WIDTH 128 // OLED display width,  in pixels
+#define SCREEN_HEIGHT 64 // OLED display height, in pixels
+
+// declare an SSD1306 display object connected to I2C
+Adafruit_SSD1306 oled(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
+
+const char* ssid = "UNIFI_IDO1";
+const char* password = "42Bidules!";
 
 WebServer server(80);
 
@@ -20,17 +30,72 @@ void handleRoot() {
   file.close();
 }
 
+//variable de temp de reconection
+int count = 0;
+
 void setup() {
   Serial.begin(115200);
+  
+  // initialize OLED display with address 0x3C for 128x64
+  if (!oled.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
+    Serial.println(F("SSD1306 allocation failed"));
+    while (true);
+  }
 
   // Connect to Wi-Fi
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
-    delay(1000);
-    Serial.println("Connecting to WiFi...");
+    if(count = 1)
+    {
+      oled.clearDisplay();
+      oled.setTextSize(1);            // set text size
+      oled.setTextColor(WHITE);       // set text color
+      oled.setCursor(0, 10);          // set position to display
+      oled.println();
+      oled.println("Failed to connect...");
+      oled.println("5 seconds before");
+      oled.println("reconnection attempt");
+      oled.display(); 
+      delay(5000);
+    }
+    else if(count = 2)
+    {
+      oled.clearDisplay();
+      oled.setTextSize(1);            // set text size
+      oled.setTextColor(WHITE);       // set text color
+      oled.setCursor(0, 10);          // set position to display
+      oled.println();
+      oled.println("Failed to connect...");
+      oled.println("10 seconds before");
+      oled.println("reconnection attempt");
+      oled.display(); 
+      delay(10000);
+    }
+    else if(count >= 3)
+    {
+      oled.clearDisplay();
+      oled.setTextSize(1);            // set text size
+      oled.setTextColor(WHITE);       // set text color
+      oled.setCursor(0, 10);          // set position to display
+      oled.println();
+      oled.println("Failed to connect...");
+      oled.println("15 seconds before");
+      oled.println("reconnection attempt");
+      oled.display(); 
+      delay(15000);
+    }
+
+    count++;
   }
-  Serial.println("Connected to WiFi");
-  Serial.println(WiFi.localIP());
+
+  oled.clearDisplay();
+  oled.setTextSize(1);            // set text size
+  oled.setTextColor(WHITE);       // set text color
+  oled.setCursor(0, 10);          // set position to display
+  oled.println();
+  oled.println("Connected to WiFi");
+  oled.println(WiFi.localIP());
+  oled.display();
 
   // Initialize SPIFFS
   if (!SPIFFS.begin(true)) {
@@ -48,4 +113,5 @@ void setup() {
 
 void loop() {
   server.handleClient();
+
 }
