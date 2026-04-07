@@ -21,7 +21,8 @@ WebServer server(80);
 
 void handleRoot() {
   File file = SPIFFS.open("/index.html", "r");
-  if (!file) {
+  if (!file) 
+  {
     server.send(404, "text/plain", "File Not Found");
     return;
   }
@@ -37,7 +38,8 @@ void setup() {
   Serial.begin(115200);
   
   // initialize OLED display with address 0x3C for 128x64
-  if (!oled.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
+  if (!oled.begin(SSD1306_SWITCHCAPVCC, 0x3C)) 
+  {
     Serial.println(F("SSD1306 allocation failed"));
     while (true);
   }
@@ -61,9 +63,9 @@ void setup() {
     else if(count = 2)
     {
       oled.clearDisplay();
-      oled.setTextSize(1);            // set text size
-      oled.setTextColor(WHITE);       // set text color
-      oled.setCursor(0, 10);          // set position to display
+      oled.setTextSize(1);            
+      oled.setTextColor(WHITE);       
+      oled.setCursor(0, 10);          
       oled.println();
       oled.println("Failed to connect...");
       oled.println("10 seconds before");
@@ -74,9 +76,9 @@ void setup() {
     else if(count >= 3)
     {
       oled.clearDisplay();
-      oled.setTextSize(1);            // set text size
-      oled.setTextColor(WHITE);       // set text color
-      oled.setCursor(0, 10);          // set position to display
+      oled.setTextSize(1);            
+      oled.setTextColor(WHITE);       
+      oled.setCursor(0, 10);          
       oled.println();
       oled.println("Failed to connect...");
       oled.println("15 seconds before");
@@ -89,16 +91,19 @@ void setup() {
   }
 
   oled.clearDisplay();
-  oled.setTextSize(1);            // set text size
-  oled.setTextColor(WHITE);       // set text color
-  oled.setCursor(0, 10);          // set position to display
+  oled.setTextSize(1);
+  oled.setTextColor(WHITE);
+  oled.setCursor(0, 10);
   oled.println();
   oled.println("Connected to WiFi");
   oled.println(WiFi.localIP());
   oled.display();
 
+  Serial.print(WiFi.localIP());
+
   // Initialize SPIFFS
-  if (!SPIFFS.begin(true)) {
+  if (!SPIFFS.begin(true)) 
+  {
     Serial.println("An Error has occurred while mounting SPIFFS");
     return;
   }
@@ -111,7 +116,7 @@ void setup() {
   server.begin();
 }
 
-void loop() {
+void loop() 
+{
   server.handleClient();
-
 }
