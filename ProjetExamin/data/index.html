@@ -108,7 +108,7 @@
                                 <div class="card shadow p-3 mb-5 bg-body-tertiary rounded" style="width: 18rem;">
                                     <div class="card-header"><h3 class="title-text">Temperature</h3></div>
                                     <div class="card-body">
-                                        <p class="values" id="temperature">23.4<span>C</span></p>
+                                        <p class="values" id="temperature"></p>
                                     </div>
                                 </div>
                             </div>
@@ -116,7 +116,7 @@
                                 <div class="card shadow p-3 mb-5 bg-body-tertiary rounded" style="width: 18rem;">
                                     <div class="card-header"><h3 class="title-text">Mouvement</h3></div>
                                     <div class="card-body">
-                                        <p class="values" id="movement">Aucun</p>
+                                        <p class="values" id="movement"></p>
                                     </div>
                                 </div>
                             </div>
@@ -124,7 +124,7 @@
                                 <div class="card shadow p-3 mb-5 bg-body-tertiary rounded" style="width: 18rem;">
                                     <div class="card-header"><h3 class="title-text">Luminosite</h3></div>
                                     <div class="card-body">
-                                        <p class="values" id="luminosite">Elever</p>
+                                        <p class="values" id="luminosite"></p>
                                     </div>
                                 </div>
                             </div>
@@ -132,7 +132,7 @@
                                 <div class="card shadow p-3 mb-5 bg-body-tertiary rounded" style="width: 18rem;">
                                     <div class="card-header"><h3 class="title-text">Humidite</h3></div>
                                     <div class="card-body">
-                                        <p class="values" id="humidite">20<span>%</span></p>
+                                        <p class="values" id="humidite"></p>
                                     </div>
                                 </div>
                             </div>
@@ -193,18 +193,69 @@
             </div>
         </div>
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous">
-            setInterval(function () {
-				var xhttp = new XMLHttpRequest();
-				xhttp.onreadystatechange = function() {
-					if (this.readyState == 4 && this.status == 200) {
-						var objTmp = JSON.parse(this.responseText);
-						document.getElementById("name").innerHTML = objTmp.tmp;
-					}
-				};
-				xhttp.open("GET", "api.jsonserver.io/mes/donnees/collecter", true);
-				xhttp.send();
-			}, 1000);
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+        <script>    
+            function fetchData() 
+            {
+                // Température
+                fetch("/api/temperature")
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById("temperature").innerHTML = data.temperature + "<span>°C</span>";
+                    })
+                    .catch(error => console.error('Erreur température:', error));
+
+                // Humidité
+                fetch("/api/humidity")
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById("humidite").innerHTML = data.humidity + "<span>%</span>";
+                    })
+                    .catch(error => console.error('Erreur humidité:', error));
+
+                // Luminosité
+                fetch("/api/luminosity")
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById("luminosite").innerHTML = data.luminosity;
+                    })
+                    .catch(error => console.error('Erreur luminosité:', error));
+
+                // Mouvement
+                fetch("/api/mouvement")
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById("movement").innerHTML = data.mouvement;
+                    })
+                    .catch(error => console.error('Erreur mouvement:', error));
+
+                // Nom d'utilisateur
+                fetch("/api/userName")
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById("name").innerHTML = data.name;
+                    })
+                    .catch(error => console.error('Erreur nom:', error));
+
+                // Email utilisateur
+                fetch("/api/userEmail")
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById("email").innerHTML = "Email: " + data.email;
+                    })
+                    .catch(error => console.error('Erreur email:', error));
+
+                // Device utilisateur
+                fetch("/api/userDevice")
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById("devices").innerHTML = data.device;
+                    })
+                    .catch(error => console.error('Erreur device:', error));
+            }
+
+            fetchData();
+            setInterval(fetchData, 1000);
         </script>
     </body>
 </html>
