@@ -18,10 +18,13 @@ Adafruit_SSD1306 oled(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
 
 const char* ssid = "UNIFI_IDO1";
 const char* password = "42Bidules!";
+
+//declare API token
 const char* apiToken = "a42485e1540c9b7f129254695a41d053";
 
 WebServer server(80);
 
+//this function added to filter out changed data from the server
 String fetchAndCleanData(const char* url, const char* fieldName) {
   HTTPClient http;
   http.begin(url);
@@ -156,6 +159,7 @@ void setup() {
     count++;
   }
 
+  //display or ip address
   oled.clearDisplay();
   oled.setTextSize(1);
   oled.setTextColor(WHITE);
